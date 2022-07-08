@@ -661,23 +661,6 @@
             methods: {
                 checkout: function(val) {
                     var _this = this;
-                    _this.allLock = (_this.allLock + 1) % 2;
-                    $.ajax({
-                        url: 'https://raw.githubusercontent.com/CMKSJ/CMKSJ.github.io/main/order-news',
-                        type: 'POST',
-                        dataType: 'JSON',
-                        data: {
-                            status: _this.allLock
-                        },
-                        success: function(resp) {
-                            if (resp.e == 0) {
-                                _this.allLock = resp.d.status;
-                            } else {
-                                _this.allLock = (_this.allLock + 1) % 2;
-                                wapalert(resp.m);
-                            }
-                        }
-                    });
                 },
                 showSearch: function(val) {
                     vm.show();
@@ -688,38 +671,18 @@
                 },
                 search: function(title, term) {
                     var _this = this;
-                    waploading();
-                    $.ajax({
-                        url: 'https://raw.githubusercontent.com/CMKSJ/CMKSJ.github.io/main/search',
-                        type: 'POST',
-                        dataType: 'JSON',
-                        data: {
-                            title: title,
-                            term: term
-                        },
-                        success: function(resp) {
-                            waploading('hide');
-                            if (resp.e === 0) {
-                                if (title) {
-                                    _this.searchlist = [];
-                                    for (var i in resp.d.list)
-                                        if (resp.d.list[i]['bx'].indexOf(_this.keyword) != -1 || resp.d.list[i]['title'].indexOf(_this.keyword) != -1)
-                                            _this.searchlist.push(resp.d.list[i]);
-                                    if ($.isEmptyObject(resp.d.list)) {
-                                        _this.hiddens();
-                                        wapalert('未查询到记录！');
-                                    }
-                                } else {
-                                    _this.list = resp.d.list;
-                                }
-                            } else {
-                                wapalert(resp.m);
-                            }
-                        },
-                        error: function() {
-                            waploading('hide');
+                    if (title) {
+                        _this.searchlist = [];
+                        for (var i in this.list)
+                            if (this.list[i]['bx'].indexOf(_this.keyword) != -1 || this.list[i]['title'].indexOf(_this.keyword) != -1)
+                                _this.searchlist.push(this.list[i]);
+                        if ($.isEmptyObject(_this.searchlist)) {
+                            _this.hiddens();
+                            wapalert('未查询到记录！');
                         }
-                    });
+                    } else {
+                        _this.list = list;
+                    }
                 },
                 tab: function(num) {
                     this.index = num;
@@ -792,28 +755,16 @@
                 },
                 init: function(type) {
                     var _this = this;
-                    waploading();
                     Vue.nextTick(function() {
-                        $.ajax({
-                            url: 'https://raw.githubusercontent.com/CMKSJ/CMKSJ.github.io/main/stat',
-                            type: 'POST',
-                            dataType: 'JSON',
-                            data: {
-                                type: type
-                            },
-                            success: function(resp) {
-                                waploading('hide');
-                                if (resp.e === 0) {
-                                    _this.updateEcharts(resp.d.stat);
-                                    _this.total = resp.d.total;
-                                } else {
-                                    wapalert(resp.m);
-                                }
-                            },
-                            error: function() {
-                                waploading('hide');
-                            }
-                        });
+                        var resp = {
+                            "total":100,
+                            "stat":[
+                                {"value":"10","name":"14学分课程"},
+                                {"value":"23","name":"核心"},
+                                {"value":"28","name":"平台"},
+                                {"value":"39","name":"通修"}]};
+                        _this.updateEcharts(resp.stat);
+                        _this.total = resp.total;
 
                     })
                 }
