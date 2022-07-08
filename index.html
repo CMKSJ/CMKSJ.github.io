@@ -663,7 +663,7 @@
                     var _this = this;
                     _this.allLock = (_this.allLock + 1) % 2;
                     $.ajax({
-                        url: 'https://cmksj.github.io/order-news.json',
+                        url: 'https://raw.githubusercontent.com/CMKSJ/CMKSJ.github.io/main/order-news',
                         type: 'POST',
                         dataType: 'JSON',
                         data: {
@@ -690,7 +690,7 @@
                     var _this = this;
                     waploading();
                     $.ajax({
-                        url: 'https://cmksj.github.io/search.json',
+                        url: 'https://raw.githubusercontent.com/CMKSJ/CMKSJ.github.io/main/search',
                         type: 'POST',
                         dataType: 'JSON',
                         data: {
@@ -795,7 +795,7 @@
                     waploading();
                     Vue.nextTick(function() {
                         $.ajax({
-                            url: 'https://cmksj.github.io/stat.json',
+                            url: 'https://raw.githubusercontent.com/CMKSJ/CMKSJ.github.io/main/stat',
                             type: 'POST',
                             dataType: 'JSON',
                             data: {
